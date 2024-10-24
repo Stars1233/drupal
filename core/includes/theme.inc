@@ -103,10 +103,10 @@ function drupal_find_theme_templates($cache, $extension, $path) {
       $theme_paths[$theme_info->base_theme][$theme_info->getName()] = $theme_info->getPath();
     }
   }
-  foreach ($theme_paths as $basetheme => $subthemes) {
+  foreach ($theme_paths as $base_theme => $subthemes) {
     foreach ($subthemes as $subtheme => $subtheme_path) {
       if (isset($theme_paths[$subtheme])) {
-        $theme_paths[$basetheme] = array_merge($theme_paths[$basetheme], $theme_paths[$subtheme]);
+        $theme_paths[$base_theme] = array_merge($theme_paths[$base_theme], $theme_paths[$subtheme]);
       }
     }
   }
@@ -385,26 +385,6 @@ function template_preprocess_datetime_form(&$variables) {
 
   $variables['content'] = $element;
 
-  // Add instructional text describing the required date and time formats.
-  // This will be hidden on JavaScript-enabled browsers that have a native
-  // datepicker.
-  if (!empty($element['#date_date_format'])) {
-    $placeholder_date = 'YYYY-MM-DD';
-    $variables['attributes']['data-drupal-field-elements'] = 'date' . ($element['#date_time_element'] === 'none' ? '' : '-time');
-    $date_format = is_array($element['#date_date_format']) ? $element['#date_date_format'][0] : date($element['#date_date_format']);
-    $variables['content']['date']['#attributes']['placeholder'] = $placeholder_date;
-    $help_date = t('Enter the date using the format @placeholder_date (e.g., @date_format).', ['@date_format' => $date_format, '@placeholder_date' => $placeholder_date]);
-    $variables['content']['date']['#attributes']['data-help'] = $help_date;
-
-    // Include time formatting instructions when a time input is present.
-    if (!empty($element['#date_time_format'])) {
-      $placeholder_time = 'hh:mm:ss';
-      $time_format = is_array($element['#date_time_format']) ? $element['#date_time_format'][0] : date($element['#date_time_format']);
-      $variables['content']['time']['#attributes']['placeholder'] = $placeholder_time;
-      $help_time = t('Enter the time using the format @placeholder_time (e.g., @time_format).', ['@time_format' => $time_format, '@placeholder_time' => $placeholder_time]);
-      $variables['content']['time']['#attributes']['data-help'] = $help_time;
-    }
-  }
 }
 
 /**
